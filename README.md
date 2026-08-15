@@ -1,4 +1,4 @@
-# KiriBita (切り板)
+# KiriBita
 
 A lightweight, native macOS clipboard manager built with Swift and AppKit.
 
