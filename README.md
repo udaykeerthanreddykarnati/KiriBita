@@ -11,13 +11,19 @@ A lightweight, native macOS clipboard manager built with Swift and AppKit.
 - **Pinning**: Lock key snippets to the top of your list.
 - **Option + Backspace**: Delete items one by one (hold down to clear sequentially).
 
-## Requirements
+## Quick Start
 
-- macOS 12.0+
-
-## Building
+### 1. Clone & Build
 
 ```bash
+git clone https://github.com/udaykeerthanreddykarnati/KiriBita.git
+cd KiriBita
 swiftc -O ClipManager.swift -o KiriBita -framework AppKit -framework Carbon
 ./KiriBita
 ```
+
+### 2. Usage
+
+- Press **`Option + V`** anywhere on your Mac to toggle the clipboard panel.
+- Press **`1`–`9`** or **`Enter`** to paste immediately into your active app.
+- Press **`Option + Backspace`** while open to delete items one by one.
