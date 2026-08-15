@@ -791,7 +791,6 @@ class ClipPanel: NSPanel {
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var panel: ClipPanel?
     var hotKeyRef: EventHotKeyRef?
-    var statusItem: NSStatusItem?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         PasteboardMonitor.shared.start()
@@ -801,18 +800,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         panel.delegate = self
         self.panel = panel
 
-        setupStatusItem()
         setupGlobalHotkey()
-    }
-
-    private func setupStatusItem() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        if let btn = statusItem?.button {
-            btn.title = "C"
-            btn.font = NSFont.systemFont(ofSize: 12, weight: .bold)
-            btn.target = self
-            btn.action = #selector(togglePanel)
-        }
     }
 
     private func setupGlobalHotkey() {
