@@ -389,7 +389,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
     private var selectedIndex: Int = 0
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 440, height: 440))
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 290, height: 440))
         buildUI()
         listenForNotifications()
         setupKeyMonitor()
@@ -427,7 +427,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
         clearBtn.action = #selector(clearTapped)
         view.addSubview(clearBtn)
 
-        searchField.placeholderString = "Search clipboard history... (Type or 1-9 to paste)"
+        searchField.placeholderString = "Search history... (1-9 to paste)"
         searchField.isBordered = true
         searchField.focusRingType = .none
         searchField.delegate = self
@@ -495,11 +495,11 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
         let w = view.bounds.width
         let h = view.bounds.height
 
-        titleLabel.frame  = NSRect(x: 14, y: h - 28, width: 140, height: 18)
-        countLabel.frame  = NSRect(x: 155, y: h - 28, width: 140, height: 18)
-        clearBtn.frame    = NSRect(x: w - 64, y: h - 29, width: 50, height: 20)
-        searchField.frame = NSRect(x: 12, y: h - 58, width: w - 24, height: 24)
-        cardView.frame    = NSRect(x: 12, y: 12, width: w - 24, height: h - 76)
+        titleLabel.frame  = NSRect(x: 10, y: h - 28, width: 120, height: 18)
+        countLabel.frame  = NSRect(x: 130, y: h - 28, width: 80, height: 18)
+        clearBtn.frame    = NSRect(x: w - 50, y: h - 29, width: 40, height: 20)
+        searchField.frame = NSRect(x: 10, y: h - 58, width: w - 20, height: 24)
+        cardView.frame    = NSRect(x: 10, y: 10, width: w - 20, height: h - 74)
 
         scrollView.frame = cardView.bounds
     }
@@ -565,11 +565,11 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
 
         countLabel.stringValue = "\(items.count) items"
 
-        let cardW = cardView.bounds.width > 0 ? cardView.bounds.width : 416
-        let itemW = max(320, cardW - 24)
+        let cardW = cardView.bounds.width > 0 ? cardView.bounds.width : 270
+        let itemW = max(200, cardW - 24)
 
         if items.isEmpty {
-            let emptyText = filterQuery.isEmpty ? "No clipboard history yet. Copy text or images anywhere!" : "No matches found."
+            let emptyText = filterQuery.isEmpty ? "No clipboard history yet." : "No matches."
             let emptyLabel = NSTextField(labelWithString: emptyText)
             emptyLabel.font = theme.font(size: 11, weight: .medium)
             emptyLabel.textColor = theme.dimColor
@@ -602,12 +602,12 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
             idxLabel.font = theme.font(size: 11, weight: .bold)
             idxLabel.textColor = theme.accentColor
             idxLabel.isEditable = false; idxLabel.isBordered = false; idxLabel.backgroundColor = .clear
-            idxLabel.frame = NSRect(x: 8, y: rowH - 24, width: 20, height: 16)
+            idxLabel.frame = NSRect(x: 6, y: rowH - 24, width: 16, height: 16)
             row.addSubview(idxLabel)
 
             if item.type == .image, let img = HistoryStore.shared.loadImage(for: item) {
                 // Render Thumbnail Image Preview
-                let imgView = NSImageView(frame: NSRect(x: 28, y: 7, width: 60, height: 40))
+                let imgView = NSImageView(frame: NSRect(x: 24, y: 7, width: 50, height: 40))
                 imgView.image = img
                 imgView.imageScaling = .scaleProportionallyUpOrDown
                 imgView.wantsLayer = true
@@ -616,48 +616,48 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
                 row.addSubview(imgView)
 
                 let titleLabel = NSTextField(labelWithString: "IMAGE")
-                titleLabel.font = theme.font(size: 11, weight: .bold)
+                titleLabel.font = theme.font(size: 10.5, weight: .bold)
                 titleLabel.textColor = theme.textColor
                 titleLabel.isEditable = false; titleLabel.isBordered = false; titleLabel.backgroundColor = .clear
-                titleLabel.frame = NSRect(x: 96, y: 22, width: itemW - 132, height: 18)
+                titleLabel.frame = NSRect(x: 78, y: 22, width: itemW - 106, height: 18)
                 row.addSubview(titleLabel)
 
-                let metaStr = "\(df.string(from: item.date)) (\(Int(img.size.width)) × \(Int(img.size.height)))"
+                let metaStr = "\(df.string(from: item.date)) (\(Int(img.size.width))×\(Int(img.size.height)))"
                 let metaLabel = NSTextField(labelWithString: metaStr)
                 metaLabel.font = theme.font(size: 8.5, weight: .semibold)
                 metaLabel.textColor = theme.dimColor
                 metaLabel.isEditable = false; metaLabel.isBordered = false; metaLabel.backgroundColor = .clear
-                metaLabel.frame = NSRect(x: 96, y: 6, width: itemW - 132, height: 14)
+                metaLabel.frame = NSRect(x: 78, y: 6, width: itemW - 106, height: 14)
                 row.addSubview(metaLabel)
             } else {
                 // Render Text Snippet Preview
                 let cleanText = item.text.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\n", with: " ")
                 let textLabel = NSTextField(wrappingLabelWithString: cleanText)
-                textLabel.font = theme.font(size: 11, weight: .bold)
+                textLabel.font = theme.font(size: 10.5, weight: .bold)
                 textLabel.textColor = theme.textColor
                 textLabel.maximumNumberOfLines = 2
                 textLabel.lineBreakMode = .byTruncatingTail
                 textLabel.isEditable = false; textLabel.isBordered = false; textLabel.backgroundColor = .clear
-                textLabel.frame = NSRect(x: 28, y: 18, width: itemW - 64, height: 30)
+                textLabel.frame = NSRect(x: 24, y: 18, width: itemW - 54, height: 30)
                 row.addSubview(textLabel)
 
                 let linesCount = item.lineCount
-                let lineSuffix = linesCount > 1 ? " • \(linesCount) lines" : ""
-                let metaStr = "\(df.string(from: item.date)) (\(item.charCount) chars\(lineSuffix))"
+                let lineSuffix = linesCount > 1 ? " • \(linesCount)L" : ""
+                let metaStr = "\(df.string(from: item.date)) (\(item.charCount)c\(lineSuffix))"
                 let metaLabel = NSTextField(labelWithString: metaStr)
                 metaLabel.font = theme.font(size: 8.5, weight: .semibold)
                 metaLabel.textColor = theme.dimColor
                 metaLabel.isEditable = false; metaLabel.isBordered = false; metaLabel.backgroundColor = .clear
-                metaLabel.frame = NSRect(x: 28, y: 3, width: itemW - 64, height: 14)
+                metaLabel.frame = NSRect(x: 24, y: 3, width: itemW - 54, height: 14)
                 row.addSubview(metaLabel)
             }
 
             // Pin Icon Indicator
             let pinLabel = NSTextField(labelWithString: item.isPinned ? "PIN" : "")
-            pinLabel.font = theme.font(size: 9, weight: .bold)
+            pinLabel.font = theme.font(size: 8.5, weight: .bold)
             pinLabel.textColor = item.isPinned ? NSColor.systemOrange : theme.dimColor
             pinLabel.isEditable = false; pinLabel.isBordered = false; pinLabel.backgroundColor = .clear
-            pinLabel.frame = NSRect(x: itemW - 32, y: rowH - 24, width: 28, height: 16)
+            pinLabel.frame = NSRect(x: itemW - 26, y: rowH - 24, width: 24, height: 16)
             pinLabel.alignment = .right
             row.addSubview(pinLabel)
 
@@ -768,7 +768,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
 // MARK: - MACCY-STYLE POPUP PANEL
 class ClipPanel: NSPanel {
     init(contentViewController: NSViewController) {
-        super.init(contentRect: NSRect(x: 0, y: 0, width: 440, height: 440),
+        super.init(contentRect: NSRect(x: 0, y: 0, width: 290, height: 440),
                    styleMask: [.nonactivatingPanel, .utilityWindow, .borderless],
                    backing: .buffered,
                    defer: false)
