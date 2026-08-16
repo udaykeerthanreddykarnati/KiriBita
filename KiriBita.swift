@@ -101,11 +101,11 @@ struct ClipItem: Codable, Identifiable {
 // MARK: - HISTORY STORE
 class HistoryStore {
     static let shared = HistoryStore()
-    static let notifName = NSNotification.Name("com.clipmanager.historyChanged")
+    static let notifName = NSNotification.Name("com.kiribita.historyChanged")
 
     private let baseDir: URL = {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("ClipManager")
+            .appendingPathComponent("KiriBita")
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir
     }()
@@ -411,7 +411,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
         view.layer?.cornerRadius = 0
         view.layer?.borderWidth = 1.0
 
-        titleLabel.stringValue = "CLIPBOARD HISTORY"
+        titleLabel.stringValue = "KIRIBITA"
         titleLabel.isEditable = false; titleLabel.isBordered = false; titleLabel.backgroundColor = .clear
         view.addSubview(titleLabel)
 
@@ -427,7 +427,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
         clearBtn.action = #selector(clearTapped)
         view.addSubview(clearBtn)
 
-        searchField.placeholderString = "Search history... (1-9 to paste)"
+        searchField.placeholderString = "Search KiriBita... (1-9 to paste)"
         searchField.isBordered = true
         searchField.focusRingType = .none
         searchField.delegate = self
@@ -569,7 +569,7 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
         let itemW = max(200, cardW - 24)
 
         if items.isEmpty {
-            let emptyText = filterQuery.isEmpty ? "No clipboard history yet." : "No matches."
+            let emptyText = filterQuery.isEmpty ? "No KiriBita history yet." : "No matches."
             let emptyLabel = NSTextField(labelWithString: emptyText)
             emptyLabel.font = theme.font(size: 11, weight: .medium)
             emptyLabel.textColor = theme.dimColor
