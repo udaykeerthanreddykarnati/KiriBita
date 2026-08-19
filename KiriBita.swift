@@ -341,6 +341,14 @@ class ClipRowView: NSView {
         updateColors()
     }
 
+    override func hitTest(_ aPoint: NSPoint) -> NSView? {
+        let localPoint = convert(aPoint, from: superview)
+        if bounds.contains(localPoint) {
+            return self
+        }
+        return super.hitTest(aPoint)
+    }
+
     override func mouseDown(with event: NSEvent) {
         let loc = convert(event.locationInWindow, from: nil)
         if loc.x > bounds.width - 36 {
@@ -749,7 +757,15 @@ class ClipPopupController: NSViewController, NSTextFieldDelegate {
 
         view.window?.orderOut(nil)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+        if let prevApp = (NSApp.delegate as? AppDelegate)?.previousApp {
+            if #available(macOS 14.0, *) {
+                prevApp.activate()
+            } else {
+                prevApp.activate(options: [.activateIgnoringOtherApps])
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
             let src = CGEventSource(stateID: .combinedSessionState)
             let vKeyDown = CGEvent(keyboardEventSource: src, virtualKey: 0x09, keyDown: true)
             vKeyDown?.flags = .maskCommand
@@ -791,6 +807,7 @@ class ClipPanel: NSPanel {
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var panel: ClipPanel?
     var hotKeyRef: EventHotKeyRef?
+    var previousApp: NSRunningApplication?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         PasteboardMonitor.shared.start()
@@ -826,6 +843,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if p.isVisible {
             p.orderOut(nil)
         } else {
+            previousApp = NSWorkspace.shared.frontmostApplication
             let mouseLoc = NSEvent.mouseLocation
             let pSize = p.frame.size
             let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
