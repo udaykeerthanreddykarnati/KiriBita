@@ -5,12 +5,13 @@ A lightweight, native macOS clipboard manager built with Swift and AppKit.
 ## Features
 
 - **Option + V Popup**: Opens a floating clipboard menu right at your mouse position.
-- **Text & Image Support**: Automatically captures text, rich strings, and images with thumbnail previews.
+- **Text & Image Support**: Captures text and images with thumbnail previews (PNG encoding runs off the main thread).
+- **Password Manager Safe**: Automatically ignores concealed and transient clipboard entries (`org.nspasteboard.ConcealedType` / `TransientType`) from 1Password, Bitwarden, and macOS Passwords.
 - **Top-Down History**: New copies appear at the top (`1.`, `2.`, `3.`) and push older items down.
 - **Quick Paste**: Press `1`–`9`, arrow keys + `Enter`, or click to paste directly into your active app.
 - **Pinning**: Lock key snippets to the top of your history.
 - **Option + Backspace**: Delete items one by one (hold down to clear sequentially).
-- **Background Daemon**: Runs silently in the background without cluttering your menu bar.
+- **Background Daemon**: Runs silently without cluttering your menu bar, with a single-instance lock to prevent duplicates.
 
 ## Quick Start
 
@@ -19,8 +20,8 @@ A lightweight, native macOS clipboard manager built with Swift and AppKit.
 ```bash
 git clone https://github.com/udaykeerthanreddykarnati/KiriBita.git
 cd KiriBita
-swiftc -O ClipManager.swift -o KiriBita -framework AppKit -framework Carbon
-./KiriBita
+swiftc -O KiriBita.swift -o KiriBita -framework AppKit -framework Carbon
+./KiriBita &
 ```
 
 ### 2. Usage
